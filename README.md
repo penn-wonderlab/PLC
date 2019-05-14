@@ -2,10 +2,19 @@ Personal Learning Compass
 ===========================
 The Personal Learning Compass is a Personal Learning Environment (PLE) support application that can:
 * Allow learners to log in with their [Hypothesis](https://web.hypothes.is/) account name;
+![PLC-1-gif](https://user-images.githubusercontent.com/35544378/57734231-10f96680-7667-11e9-82aa-cc9ef8265538.gif)
+
 * Represent a learner's recent learning interests by displaying his/her Hypothesis tags (public tags);
+![PLC-2-gif](https://user-images.githubusercontent.com/35544378/57734280-2cfd0800-7667-11e9-9913-430919063bbf.gif)
+
 * Generate the learning resources network to connect an individual learner to people who share the same interest, ideas or resources;
+![PLC-3-gif](https://user-images.githubusercontent.com/35544378/57734302-39816080-7667-11e9-95b3-ca2a8297c934.gif)
+
 * Allow learners to customize the learning resources network 
+![PLC-4-gif](https://user-images.githubusercontent.com/35544378/57734338-4dc55d80-7667-11e9-80b7-176a4223a24c.gif)
+
 * Help a learner to discover and explore new learning resources of interest;
+![PLC-5-gif](https://user-images.githubusercontent.com/35544378/57734376-5d44a680-7667-11e9-8318-c8baf1b8054b.gif)
 
 
 Development Environment
