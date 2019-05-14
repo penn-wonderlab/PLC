@@ -1,0 +1,22 @@
+.filter-container {
+  background: #fff;
+  padding: 2em 2em;
+  margin: 0px 1em 0px 1em;
+  color: #40434e !important;
+}
+
+.filter-container label {
+  font-size: 0.8em !important;
+}
+.filter-container label.filter-name {
+  margin-right: 2em !important;
+  color: rgba(0, 0, 0, 0.8) !important;
+}
+
+.filter-container label.filter-item {
+  color: #7f7f7f;
+}
+
+.filter-container .ui.form .inline.fields {
+  margin-bottom: 0.5em !important;
+}

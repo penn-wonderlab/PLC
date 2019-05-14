@@ -1,0 +1,81 @@
+.header {
+  background: #4d9ae9 !important;
+  background: #2d90f5 !important;
+  background: #4a4a4a !important;
+  /* background: #59a5ef !important; */
+  border-bottom: none !important;
+  /* padding: 0px 1.5em !important; */
+  box-shadow: 0 1px 2px 0 rgba(34, 36, 38, 0.15) !important;
+  font-family: "Montserrat", sans-serif !important;
+  margin-bottom: 0px !important;
+}
+.header .item {
+  color: #fff !important;
+  padding: 0.5em 1em !important;
+  font-size: 16px !important;
+  transition: all linear 400ms !important;
+}
+
+.header .item i {
+  transition: all linear 400ms !important;
+  cursor: pointer;
+}
+
+.header .item:hover,
+.header .item:focus {
+  color: #2d90f5 !important;
+}
+
+.header .item:hover i,
+.header .item:focus i {
+  color: #2d90f5 !important;
+}
+
+.header-icon {
+  padding: 6px 6px;
+  margin-right: 8px;
+  font-size: 1.2em;
+  /* border: 1.5px solid #fff; */
+  /* border-radius: 50%; */
+  color: #fff;
+}
+
+.header .right.menu {
+  display: -webkit-box !important;
+}
+
+.header .right .item {
+  font-size: 13px !important;
+  font-weight: 300 !important;
+  padding-right: 1.8em !important;
+}
+
+.header .right .item.login {
+  font-size: 15px !important;
+  font-weight: 400 !important;
+}
+.ui.secondary.pointing.menu .item {
+  margin: 0px !important;
+}
+.item.login {
+  padding: 0.2em 1.5em !important;
+  /* margin: 0.5em 1em !important; */
+  text-transform: uppercase !important;
+  box-shadow: 0 1px 2px 0 rgba(34, 36, 38, 0.15) !important;
+  transition: all linear 400ms !important;
+  color: #fff !important;
+  background: #2d90f5 !important;
+  /* border: 1px solid #fff !important; */
+}
+
+.item.login:hover,
+.item.login:focus {
+  /* color: #4d9ae9 !important; */
+  color: #fff !important;
+  /* background: #fff !important; */
+  background: #2d71b4 !important;
+}
+
+.header-span {
+  display: -webkit-box;
+}

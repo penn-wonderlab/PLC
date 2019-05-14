@@ -1,0 +1,16 @@
+.not-found {
+  width: 28em !important;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 12em 3em 0em 3em !important;
+  opacity: 0.8;
+}
+.content-container {
+  text-align: center;
+  /* padding: 1em 3em !important; */
+}
+.content {
+  font-size: 1.8em;
+  color: #4a4a4a;
+}

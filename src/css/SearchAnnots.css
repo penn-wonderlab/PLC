@@ -1,0 +1,32 @@
+.dash-header {
+  padding: 0.4em 1em !important;
+  display: flex !important;
+  justify-content: space-between !important;
+}
+.dash-header p {
+  color: #702632 !important;
+  font-weight: 500 !important;
+  margin-bottom: 0px !important;
+  margin-top: 0.3em !important;
+}
+.ui.search .prompt {
+  background: transparent !important;
+  border: unset !important;
+  border-bottom: 1px solid #5e5e5e !important;
+  border-radius: 0px !important;
+  margin-top: -1.2em !important;
+}
+
+.ui.search .prompt:active,
+.ui.search .prompt:focus {
+  border-bottom: 1px solid #2d90f5 !important;
+}
+
+.ui.icon.input i {
+  margin-top: -0.4em !important;
+}
+
+.ui.search .prompt:active + i,
+.ui.search .prompt:focus + i {
+  color: #2d90f5 !important;
+}

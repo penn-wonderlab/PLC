@@ -1,0 +1,113 @@
+.map-container {
+  height: 65vh;
+  background: #f9fbfd !important;
+  margin: -1em 1em !important;
+}
+
+.img-container {
+  padding: 5em 0px;
+}
+.temp-image {
+  width: 18em !important;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.temp-text {
+  margin-top: 2em;
+  text-align: center;
+  font-weight: 500;
+  font-size: 1.4em;
+  line-height: 1.6em;
+}
+.text-color-blue {
+  color: #2d90f5;
+}
+
+.text-color-red {
+  color: #ac293e;
+}
+.tags {
+  color: red;
+  text-transform: lowercase;
+}
+
+.test-style {
+  font-size: 300%;
+  font-weight: bold;
+}
+
+.DVSL-container.DVSL-NetChart.DVSL-flat {
+  height: 60vh !important;
+}
+.cover {
+  background-color: #f9fbfd;
+  height: 180px;
+  width: 160px;
+  position: absolute;
+  bottom: 0em;
+  right: 0;
+  z-index: 999 !important;
+}
+
+.ui.segment {
+  background: #f9fbfd !important;
+  border-radius: 0 !important;
+  border: 0 !important;
+  box-shadow: inherit !important;
+}
+
+.ui.wide.left.sidebar,
+.ui.wide.right.sidebar {
+  width: 400px;
+}
+
+.DVSL-Menu {
+  font-family: "Lato", sans-serif !important;
+  border-radius: 2px !important;
+  box-shadow: 0 1px 7px rgba(0, 0, 0, 0.4) !important;
+  box-shadow: 0 1px 10px rgba(34, 36, 38, 0.15) !important;
+  color: #40434e !important;
+  border-bottom: none !important;
+}
+
+.DVSL-Menu,
+.DVSL-info-center,
+.DVSL-info-left,
+.DVSL-info-right {
+  background: #eef1f8 !important;
+  background: #f4f4f4 !important;
+  background: #fff !important;
+  font-size: 1em !important;
+}
+
+.DVSL-Menu nav {
+  background: #a5abb6 !important;
+  /* background: #4a4a4a !important; */
+  /* background: #2d90f5 !important; */
+  border-radius: 0px !important;
+  box-shadow: none !important;
+  padding: 6px 8px !important;
+}
+
+.DVSL-Menu-title {
+  padding: 8px 32px 8px 12px !important;
+}
+
+.DVSL-Menu-close {
+  border: none !important;
+  right: 8px !important;
+  top: 8px !important;
+}
+
+.DVSL-Menu nav a {
+  color: #fff !important;
+}
+
+/* Change the icon */
+/* a.DVSL-NC-button-hide {
+  background-image: url("https://i.ibb.co/1vzhnwm/hide.png") !important;
+  background-position: 3px 3px !important;
+  padding: 3px 2px 3px 25px !important;
+  background-size: 18px !important;
+} */

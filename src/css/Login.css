@@ -1,0 +1,55 @@
+.login-container {
+  text-align: center;
+  padding: 12em 3em !important;
+}
+
+.login-container h4 {
+  font-weight: 500 !important;
+  font-size: 1.7em !important;
+  font-family: "Montserrat", sans-serif !important;
+}
+
+.login-text {
+  text-align: left;
+  padding: 2em 12em !important;
+}
+
+.login-text input {
+  border-radius: 0px !important;
+}
+
+.login-text label {
+  font-weight: 500 !important;
+  margin-bottom: 0.7em !important;
+}
+
+.login-text label.api-label {
+  color: #3d3d3d !important;
+  font-weight: 300 !important;
+  font-size: 0.8em !important;
+  margin-top: -0.6em !important;
+}
+
+::placeholder {
+  font-weight: 300 !important;
+  font-family: "Montserrat", sans-serif !important;
+  font-size: 0.8em !important;
+}
+
+button.button {
+  margin: 0.7em 0px !important;
+  border-radius: 0px !important;
+  background: #2d90f5 !important;
+  font-family: "Montserrat", sans-serif !important;
+  font-weight: 500 !important;
+  transition: all linear 400ms !important;
+}
+
+button.button:focus,
+button.button:hover {
+  background: #2d71b4 !important;
+}
+
+.ui.horizontal.divider {
+  padding: 0em 12em !important;
+}
