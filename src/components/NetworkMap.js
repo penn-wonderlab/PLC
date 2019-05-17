@@ -29,7 +29,8 @@ class NetworkMap extends React.Component {
     preTag: "",
     nodeId: "",
     incontext: "",
-    backMap: this.props.backMap
+    backMap: this.props.backMap,
+    newState: ""
   };
 
   componentDidUpdate() {
@@ -72,7 +73,7 @@ class NetworkMap extends React.Component {
     const pageArray = this.props.searchedAnnots.Pagedata.filter(arr => {
       return arr.references === undefined;
     });
-    // console.log("new array for page", pageArray);
+    console.log("new annots for the page", pageArray);
 
     // Fake data for test
     var testData = {
@@ -166,6 +167,47 @@ class NetworkMap extends React.Component {
 
     // console.log("same user array:", arrayModify);
 
+    // Annots on the same page
+    const pageAnnotArray = pageArray.map(arr => {
+      return {
+        annotId: arr.id,
+        created: arr.created,
+        document: arr.document,
+        // links: arr.links,
+        tags: arr.tags,
+        target: arr.target,
+        text: arr.text,
+        uri: arr.uri,
+        incontext: arr.links.incontext,
+        user: arr.user.substring(
+          arr.user.indexOf(":") + 1,
+          arr.user.indexOf("@")
+        )
+      };
+    });
+
+    const pageArrayModify = pageAnnotArray.reduce((o, cur) => {
+      var occurs = o.reduce((n, item, i) => {
+        return item.user === cur.user ? i : n;
+      }, -1);
+      if (occurs >= 0) {
+        o[occurs].text = o[occurs].text.concat(cur.text);
+        o[occurs].annotId = o[occurs].annotId.concat(cur.annotId);
+        // o[occurs].uri = o[occurs].uri.concat(cur.uri);
+        // o[occurs].incontext = o[occurs].incontext.concat(cur.incontext);
+      } else {
+        var obj = {
+          user: cur.user,
+          text: [cur.text],
+          annotId: [cur.annotId]
+          // uri: [cur.uri],
+          // incontext: [cur.incontext]
+        };
+        o = o.concat([obj]);
+      }
+      return o;
+    }, []);
+
     const newNodesM = [];
     const newNodesT = [];
     const newNodesF = [];
@@ -173,6 +215,14 @@ class NetworkMap extends React.Component {
     const newLinksM = [];
     const newLinksT = [];
     const newLinksF = [];
+
+    const newNodesP = [];
+    const newNodesA = [];
+    // const newNodesG = [];
+
+    const newLinksP = [];
+    const newLinksA = [];
+    // const newlinksG = [];
 
     // nodes data
     for (var i = 0; i < arrayModify.length; i++) {
@@ -253,13 +303,60 @@ class NetworkMap extends React.Component {
             lineWidth: 2
           },
           incontext: arrayModify[j].incontext[0],
-
           loaded: true
         });
       }
     }
 
-    const newNodes = newNodesMM.concat(newNodesT, newNodesF, testData.nodes);
+    // Annots on the same page -- nodes data
+    for (var i = 0; i < pageArrayModify.length; i++) {
+      newNodesP.push({
+        id: "C" + i,
+        style: {
+          label: pageArrayModify[i].user,
+          fillColor: "#65BCF8",
+          lineColor: "rgba(89, 168, 223, 0.5)"
+        },
+        user: true,
+        loaded: true
+      });
+    }
+
+    for (var j = 0; j < pageArrayModify.length; j++) {
+      if (pageArrayModify[j].text.length > 1) {
+        for (var k = 0; k < pageArrayModify[j].text.length; k++) {
+          newNodesA.push({
+            id: "C" + j + "NN" + k,
+            style: {
+              label: pageArrayModify[j].text[k],
+              fillColor: "#68CF9D",
+              lineColor: "rgba(98, 188, 144, 0.5)"
+            },
+            annotId: pageArrayModify[j].annotId[k],
+            loaded: true,
+            multiple: "yes"
+          });
+        }
+      } else {
+        newNodesA.push({
+          id: "C" + j + "NN" + j,
+          style: {
+            label: pageArrayModify[j].text[0],
+            fillColor: "#68CF9D",
+            lineColor: "rgba(98, 188, 144, 0.5)"
+          },
+          annotId: pageArrayModify[j].annotId[0],
+          loaded: true
+        });
+      }
+    }
+
+    const newNodes = newNodesMM.concat(
+      newNodesT,
+      newNodesF,
+      newNodesP,
+      newNodesA
+    );
     // console.log("newNodes", newNodes);
 
     // links data
@@ -293,7 +390,29 @@ class NetworkMap extends React.Component {
       });
     }
 
-    var newLinks = newLinksM.concat(newLinksT, newLinksF, testData.links);
+    // Annots on the same page -- links data
+    for (var i = 0; i < newNodesP.length; i++) {
+      newLinksP.push({
+        id: "LL" + i,
+        from: newNodesP[i].id,
+        to: this.state.nodeId,
+        type: "creators"
+      });
+    }
+
+    for (var i = 0; i < newNodesA.length; i++) {
+      newLinksA.push({
+        id: "LNN" + i,
+        from: newNodesA[i].id,
+        to: newNodesA[i].id.substring(
+          newNodesA[i].id.indexOf("C"),
+          newNodesA[i].id.indexOf("NN")
+        ),
+        type: "annots"
+      });
+    }
+
+    var newLinks = newLinksM.concat(newLinksT, newLinksF, newLinksP, newLinksA);
     // console.log("newLinks", newLinks);
 
     var self = this;
@@ -308,11 +427,12 @@ class NetworkMap extends React.Component {
         navigation: {
           focusNodeExpansionRadius: 1,
           initialNodes: ["T"],
-          mode: "focusnodes",
-          autoZoomOnFocus: true
+          // mode: "focusnodes",
+          mode: "manual"
+          // autoZoomOnFocus: true
         },
         layout: {
-          mode: "radial",
+          mode: "dynamic",
           nodeSpacing: 30
         },
         style: {
@@ -352,6 +472,9 @@ class NetworkMap extends React.Component {
         interaction: {
           resizing: {
             enabled: false
+          },
+          zooming: {
+            initialAutoZoom: false
           }
         }
       });
@@ -473,10 +596,12 @@ class NetworkMap extends React.Component {
           link.fillColor = "#D8D8D8";
         }
       }
+
       function graphDoubleClick(event) {
         event.preventDefault();
-        console.log("event data:", event.clickNode.data);
+        // console.log("event data:", event.clickNode.data);
         // console.log("tell me double", event.clickNode);
+
         if (event.clickNode === undefined) {
           return;
         } else if (event.clickNode.data.annotId) {
@@ -485,6 +610,23 @@ class NetworkMap extends React.Component {
             visible: true,
             preTag: selectedTag
           });
+
+          // save and restore state
+
+          setTimeout(function() {
+            var state = t.saveState();
+            self.setState(
+              {
+                newState: state
+              },
+              function() {
+                console.log("update state:", self.state.newState);
+              }
+            );
+          }, 0);
+          console.log("check state:", t.saveState());
+          console.log("the state in state", self.state.newState);
+
           selfProps.fetchFullAnnot(event.clickNode.data.annotId);
         } else if (event.clickNode.data.incontext) {
           // console.log("original page:", event.clickNode.data.incontext);
@@ -507,10 +649,34 @@ class NetworkMap extends React.Component {
           self.setState({
             nodeId: event.clickNode.data.id,
             incontext: event.clickNode.data.incontext,
-            backMap: true
+            backMap: true,
+            preTag: selectedTag
           });
+
+          // save and restore state
+          setTimeout(function() {
+            var linkState = t.saveState();
+            self.setState({
+              newState: linkState
+            });
+          }, 0);
+
           selfProps.fetchPageAnnots(event.clickNode.data.style.label);
         }
+      }
+
+      // save and restore state
+      // function restoreNetwork(s) {
+      //   if (s !== "" && selectedTag === self.state.preTag) {
+      //     t.restoreState(s);
+      //   }
+      // }
+      if (
+        self.state.newState !== "" &&
+        selectedTag === self.state.preTag &&
+        !timeFilter
+      ) {
+        t.restoreState(self.state.newState);
       }
     }
   }
@@ -570,7 +736,7 @@ class NetworkMap extends React.Component {
               <div id="chartNetChart" className="chart" />
               {/* <div>{this.renderBack()}</div> */}
 
-              <p className="cover" />
+              {/* <p className="cover" /> */}
               <div>{this.renderAnnots()}</div>
             </Segment>
           </Sidebar.Pusher>
@@ -580,7 +746,6 @@ class NetworkMap extends React.Component {
   }
 }
 const mapStateToProps = state => {
-  // console.log("full annot:", state.fullAnnot);
   return { fullAnnots: state.fullAnnot };
 };
 
