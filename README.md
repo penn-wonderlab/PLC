@@ -37,15 +37,20 @@ $ npm install --save redux react-redux axios redux-thunk react-scripts react-dom
 ```
 3. Install ZoomCharts: Personal Learning Compass uses ZoomCharts.js as the library to visualize the learning resources network
 ```
-npm install --save @dvsl/zoomcharts
+$ npm install --save @dvsl/zoomcharts
 ```
 4. Install Babel: Install `babel`, `babel-core`, `babel-loader`, `babel-preset-env` and `babel-preset-react` as dev dependencies.
 ```
-npm install --save-dev babel babel-core babel-loader babel-preset-env babel-preset-react 
+$ npm install --save-dev babel babel-core babel-loader babel-preset-env babel-preset-react 
+```
+5. Install Semantic UI React
+```
+$  yarn add semantic-ui-react
+$  yarn add semantic-ui-css
 ```
 ### Run ###
 
 * Run PLC Locally
 ```
-npm start
+$ npm start
 ```
