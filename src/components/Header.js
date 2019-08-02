@@ -7,9 +7,15 @@ class Header extends React.Component {
   constructor(props) {
     super(props);
     this.renderLogout = this.renderLogout.bind(this);
+    // this.state = {
+    //   checkAuth: this.props.checkAuth
+    // };
   }
 
   renderLogout = () => {
+    // this.setState({
+    //   checkAuth: false
+    // });
     Auth.logout(() => {
       this.props.history.push({
         pathname: "/"
@@ -20,8 +26,11 @@ class Header extends React.Component {
   render() {
     // console.log("header props", this.props.username);
     // console.log("authentication", Auth.isAuthenticated());
+    const { checkAuth } = this.props;
     const { username } = this.props;
     const authenticated = Auth.isAuthenticated();
+
+    console.log("check header auth:", this.props.checkAuth);
     // console.log(username ? "yes" : "no");
     return (
       <div className="ui secondary fixed pointing menu header">

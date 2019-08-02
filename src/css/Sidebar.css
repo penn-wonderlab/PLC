@@ -9,6 +9,13 @@
 .ui .sidebar-content {
   margin-right: -10px !important;
 }
+
+.sidebar-content p {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+}
 .ui .basic-info {
   background: #eef1f8;
   padding: 1em 1.2em;
@@ -113,4 +120,8 @@ p.item.tag-item.annot-tag {
   text-align: center !important;
   color: rgba(64, 67, 78, 0.8) !important;
   margin-bottom: 0.3em !important;
+}
+
+.horizontal.list.sidebar-tag {
+  margin-top: 20px !important;
 }

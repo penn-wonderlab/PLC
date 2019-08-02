@@ -12,15 +12,15 @@ let Chart = zc.NetChart;
 
 // Zoomcharts license and license key
 window.ZoomChartsLicense =
-  "ZCS-101rm718m: ZoomCharts SDK 30 day Free Trial License for che..@..l.com (valid for testing only); upgrades until: 2020-03-21";
+  "ZCP-dq3x184y6: ZoomCharts SDK Internal Use license for University of Minnesota. Valid for 1 chart developer and 1 external site license";
 window.ZoomChartsLicenseKey =
-  "39d8cd3eba17f98d5c4b5862a4db1effed5b48b4f96a0d9450" +
-  "229bb8b24b0f012c2e95c31e6fdd092901628a73aa3511b6aca50b26575c1dc9c5033b42243a0" +
-  "842344a7ea2b32b34cbfc406ea3ea1e1950de24892ebcf773a8157a460fa346039dbd27458a43" +
-  "1b5a855d2da8c211526c28caba6402542aac71a8af5b2e3982387394dbf9f4b450da9b8017aad" +
-  "08d6e9057b6f40cfa3f52c7cec3b38a40e93e5b6074da373c42810f8f7171396566c2ffacbb12" +
-  "5fcf57332ec7afb9264fc6d35a2bb9e20830093d469d92fef823020004ec2dd7f908ee9a7bfb6" +
-  "c5fd0134969d7dca1050eeffed66884866f97ae26895c32dd13c8e5cf6c9c37e4a1169ccdaa01";
+  "9ecdcfd309df4b4a9bb8ffca5c2f3c0561911045d450c36abc" +
+  "65fd86ce49f03a893df118954e43bae3c044def8f1561828f71b123765f399104720eff951e74" +
+  "3c7e68f18633262026c2cb4350f0e7cee21923ec226f943df31aa64c1f36c35bf660407fa18ea" +
+  "2701c1b52d6576340539a77d626789b65c4d6b66905da423631579634876a14661d2ffd77660b" +
+  "43c2ffed1e2d2b91932ac0aba5fc3be4247e9a9d68ff05c0136929f7ef203af579cda1b2d9190" +
+  "6fc667d50ecd307e2cd3317636a757e00a27a3992fb01556669142c8f2f2bdc32d7f9f349de32" +
+  "a2afc2f7e25e3834b2390355d521a3fa3a2ba1e14c235710583b6ed0f4f2aada16ceaf43a75d0";
 
 class NetworkMap extends React.Component {
   state = {
@@ -30,12 +30,15 @@ class NetworkMap extends React.Component {
     nodeId: "",
     incontext: "",
     backMap: this.props.backMap,
-    newState: ""
+    newState: "",
+    reload: true,
+    reloadPage: true
   };
 
   componentDidUpdate() {
     // console.log("pass tag here:", this.props.passTag);
     // console.log("show me", this.props.searchedAnnots.data);
+
     const selectedTag = this.props.passTag;
     // const backMap = this.props.backMap;
 
@@ -66,14 +69,195 @@ class NetworkMap extends React.Component {
       }
     });
 
-    const array = filterArray.filter(arr => {
+    var array = filterArray.filter(arr => {
       return arr.references === undefined;
     });
+    console.log("array:", array);
+
+    // Image & link display
+    var self = this;
+
+    function displayImgLink(chartData) {
+      if (self.state.reload) {
+        for (var i = 0; i < chartData.length; i++) {
+          var urls = /(\b(https?|ftp):\/\/[A-Z0-9+&@#\/%?=~_|!:,.;-]*[-A-Z0-9+&@#\/%=~_|])/gim;
+          var imgs = /(https?:\/\/.*\.(?:jpeg|jpg|png|gif))/i;
+
+          if (chartData[i].text.match(urls) && !chartData[i].text.match(imgs)) {
+            console.log("look! have url and image!", chartData[i].text);
+            if (chartData[i].text.includes("a href")) {
+              chartData[i].text = chartData[i].text.replace(
+                /<a href=/gi,
+                '<a target="_blank" href='
+              );
+            } else if (chartData[i].text.includes("iframe")) {
+              console.log("iframe:", chartData[i].text);
+            } else {
+              chartData[i].text = chartData[i].text.replace(
+                urls,
+                '<a href="$1" target="_blank">$1</a>'
+              );
+            }
+          } else if (chartData[i].text.match(/\.(jpeg|jpg|png|gif)/g)) {
+            var regex = /(https?:\/\/.*\.(?:png|jpg))/i;
+            chartData[i].text = chartData[i].text
+              .replace("![]", "")
+              .replace(/[()]/g, "")
+              .replace(
+                regex,
+                '<img src="$1" width="50%" style="margin-bottom: 0.2rem; margin-top: 0.2rem; margin-left: auto; margin-right: auto; float: none; display: block"></img>'
+              );
+            var nonImgUrl = /(?:^|[^"'])((ftp|http|https|file):\/\/[\S]+(\b|$))/gim;
+            if (chartData[i].text.match(nonImgUrl)) {
+              if (chartData[i].text.includes("a href")) {
+                chartData[i].text = chartData[i].text.replace(
+                  nonImgUrl,
+                  '<a target="_blank" href='
+                );
+              } else if (chartData[i].text.includes("iframe")) {
+                console.log("iframe:", chartData[i].text);
+              } else {
+                chartData[i].text = chartData[i].text.replace(
+                  nonImgUrl,
+                  '<a href="$1" target="_blank">$1</a>'
+                );
+              }
+            }
+          }
+          if (i === chartData.length - 1) {
+            console.log("hahahhahaha:", i);
+            self.setState({
+              reload: false
+            });
+          }
+        }
+      }
+    }
+
+    function displayImgLinkPage(chartDataPage) {
+      if (self.state.reloadPage) {
+        for (var i = 0; i < chartDataPage.length; i++) {
+          var urls = /(\b(https?|ftp):\/\/[A-Z0-9+&@#\/%?=~_|!:,.;-]*[-A-Z0-9+&@#\/%=~_|])/gim;
+          var imgs = /(https?:\/\/.*\.(?:jpeg|jpg|png|gif))/i;
+
+          if (
+            chartDataPage[i].text.match(urls) &&
+            !chartDataPage[i].text.match(imgs)
+          ) {
+            console.log("look! have url and image!", chartDataPage[i].text);
+            if (chartDataPage[i].text.includes("a href")) {
+              chartDataPage[i].text = chartDataPage[i].text.replace(
+                /<a href=/gi,
+                '<a target="_blank" href='
+              );
+            } else if (chartDataPage[i].text.includes("iframe")) {
+              console.log("iframe:", chartDataPage[i].text);
+            } else {
+              chartDataPage[i].text = chartDataPage[i].text.replace(
+                urls,
+                '<a href="$1" target="_blank">$1</a>'
+              );
+            }
+          } else if (chartDataPage[i].text.match(/\.(jpeg|jpg|png|gif)/g)) {
+            var regex = /(https?:\/\/.*\.(?:png|jpg))/i;
+            chartDataPage[i].text = chartDataPage[i].text
+              .replace("![]", "")
+              .replace(/[()]/g, "")
+              .replace(
+                regex,
+                '<img src="$1" width="50%" style="margin-bottom: 0.2rem; margin-top: 0.2rem; margin-left: auto; margin-right: auto; float: none; display: block"></img>'
+              );
+            var nonImgUrl = /(?:^|[^"'])((ftp|http|https|file):\/\/[\S]+(\b|$))/gim;
+            if (chartDataPage[i].text.match(nonImgUrl)) {
+              if (chartDataPage[i].text.includes("a href")) {
+                chartDataPage[i].text = chartDataPage[i].text.replace(
+                  nonImgUrl,
+                  '<a target="_blank" href='
+                );
+              } else if (chartDataPage[i].text.includes("iframe")) {
+                console.log("iframe:", chartDataPage[i].text);
+              } else {
+                chartDataPage[i].text = chartDataPage[i].text.replace(
+                  nonImgUrl,
+                  '<a href="$1" target="_blank">$1</a>'
+                );
+              }
+            }
+          }
+          if (i === chartDataPage.length - 1) {
+            console.log("hahahhahaha:", i);
+            self.setState({
+              reloadPage: false
+            });
+          }
+        }
+      }
+    }
+
+    // if (self.state.reload) {
+    //   for (var i = 0; i < array.length; i++) {
+    //     var urls = /(\b(https?|ftp):\/\/[A-Z0-9+&@#\/%?=~_|!:,.;-]*[-A-Z0-9+&@#\/%=~_|])/gim;
+    //     var imgs = /(https?:\/\/.*\.(?:jpeg|jpg|png|gif))/i;
+
+    //     if (array[i].text.match(urls) && !array[i].text.match(imgs)) {
+    //       console.log("look! have url and image!", array[i].text);
+    //       if (array[i].text.includes("a href")) {
+    //         array[i].text = array[i].text.replace(
+    //           /<a href=/gi,
+    //           '<a target="_blank" href='
+    //         );
+    //       } else if (array[i].text.includes("iframe")) {
+    //         console.log("iframe:", array[i].text);
+    //       } else {
+    //         array[i].text = array[i].text.replace(
+    //           urls,
+    //           '<a href="$1" target="_blank">$1</a>'
+    //         );
+    //       }
+    //     } else if (array[i].text.match(/\.(jpeg|jpg|png|gif)/g)) {
+    //       var regex = /(https?:\/\/.*\.(?:png|jpg))/i;
+    //       array[i].text = array[i].text
+    //         .replace("![]", "")
+    //         .replace(/[()]/g, "")
+    //         .replace(
+    //           regex,
+    //           '<img src="$1" width="50%" style="margin-bottom: 0.2rem; margin-top: 0.2rem; margin-left: auto; margin-right: auto; float: none; display: block"></img>'
+    //         );
+    //       var nonImgUrl = /(?:^|[^"'])((ftp|http|https|file):\/\/[\S]+(\b|$))/gim;
+    //       if (array[i].text.match(nonImgUrl)) {
+    //         if (array[i].text.includes("a href")) {
+    //           array[i].text = array[i].text.replace(
+    //             nonImgUrl,
+    //             '<a target="_blank" href='
+    //           );
+    //         } else if (array[i].text.includes("iframe")) {
+    //           console.log("iframe:", array[i].text);
+    //         } else {
+    //           array[i].text = array[i].text.replace(
+    //             nonImgUrl,
+    //             '<a href="$1" target="_blank">$1</a>'
+    //           );
+    //         }
+    //       }
+    //     }
+    //     if (i === array.length - 1) {
+    //       console.log("hahahhahaha:", i);
+    //       self.setState({
+    //         reload: false
+    //       });
+    //     }
+    //   }
+    // }
+
+    // console.log("this is the new array", array);
 
     const pageArray = this.props.searchedAnnots.Pagedata.filter(arr => {
       return arr.references === undefined;
     });
     console.log("new annots for the page", pageArray);
+
+    displayImgLink(array);
+    displayImgLinkPage(pageArray);
 
     // Fake data for test
     var testData = {
@@ -454,6 +638,9 @@ class NetworkMap extends React.Component {
           nodeLabel: {
             textStyle: { fillColor: "white" }
           }
+        },
+        selection: {
+          enabled: true
         },
         data: {
           preloaded: {

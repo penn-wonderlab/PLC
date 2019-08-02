@@ -8,7 +8,7 @@ class AnnotSidebar extends React.Component {
     if (annotData.user) {
       return this.props.fullAnnots.annotData.tags.map(tag => {
         return (
-          <div className="ui horizontal list" key={tag}>
+          <div className="ui horizontal list sidebar-tag" key={tag}>
             <p className="item tag-item annot-tag">{tag}</p>
           </div>
         );
@@ -16,9 +16,65 @@ class AnnotSidebar extends React.Component {
     }
   }
 
+  // htmlDecode(input) {
+  //   var e = document.createElement("div");
+  //   e.innerHTML = input;
+  //   return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+  // }
+
   render() {
     const annotData = this.props.fullAnnots.annotData;
+    console.log("sidebar data", annotData);
+
     if (annotData.user) {
+      var urls = /(\b(https?|ftp):\/\/[A-Z0-9+&@#\/%?=~_|!:,.;-]*[-A-Z0-9+&@#\/%=~_|])/gim;
+      var imgs = /(https?:\/\/.*\.(?:jpeg|jpg|png|gif))/i;
+      console.log("annot data text", annotData.text);
+
+      if (annotData.text.match(urls) && !annotData.text.match(imgs)) {
+        if (annotData.text.includes("a href")) {
+          annotData.text = annotData.text.replace(
+            /<a href=/gi,
+            '<a target="_blank" href='
+          );
+        } else if (annotData.text.includes("iframe")) {
+          console.log("iframe:", annotData.text);
+        } else {
+          annotData.text = annotData.text.replace(
+            urls,
+            '<a href="$1" target="_blank">$1</a>'
+          );
+        }
+        console.log("come on!");
+      } else if (annotData.text.match(/\.(jpeg|jpg|png|gif)/g)) {
+        var regex = /(https?:\/\/.*\.(?:png|jpg))/i;
+        annotData.text = annotData.text
+          .replace("![]", "")
+          .replace(/[()]/g, "")
+          .replace(
+            regex,
+            '<img src="$1" width="100%" style="margin-bottom: 2rem; margin-top: 1rem;"></img>'
+          );
+        var nonImgUrl = /(?:^|[^"'])((ftp|http|https|file):\/\/[\S]+(\b|$))/gim;
+        if (annotData.text.match(nonImgUrl)) {
+          if (annotData.text.includes("a href")) {
+            annotData.text = annotData.text.replace(
+              nonImgUrl,
+              '<a target="_blank" href='
+            );
+          } else if (annotData.text.includes("iframe")) {
+            console.log("iframe:", annotData.text);
+          } else {
+            annotData.text = annotData.text.replace(
+              nonImgUrl,
+              '<a href="$1" target="_blank">$1</a>'
+            );
+          }
+        }
+
+        console.log("come on baby!");
+      }
+
       var user = annotData.user.substring(
         annotData.user.indexOf(":") + 1,
         annotData.user.indexOf("@")
@@ -70,7 +126,15 @@ class AnnotSidebar extends React.Component {
               <p className="create-time">{time}</p>
             </div>
             <p className="target-info">{target}</p>
-            <p className="text-info">{annotData.text}</p>
+            {/* <p className="text-info">{annotData.text}</p> */}
+
+            <div
+              className="text-info"
+              dangerouslySetInnerHTML={{
+                __html: annotData.text
+              }}
+            />
+
             <div>{this.renderTags()}</div>
           </div>
         </Menu.Item>

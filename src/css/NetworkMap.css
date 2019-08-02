@@ -40,6 +40,13 @@
 .DVSL-container.DVSL-NetChart.DVSL-flat {
   height: 60vh !important;
 }
+
+.DVSL-Menu-title {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+}
 .cover {
   background-color: #f9fbfd;
   height: 180px;
@@ -111,3 +118,7 @@
   padding: 3px 2px 3px 25px !important;
   background-size: 18px !important;
 } */
+
+.DVSL-Menu img {
+  padding: 12px 0px 12px 16px !important;
+}
